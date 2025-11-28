@@ -1,11 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { floorPlanAPI } from "../services/api";
 
 export function FloorplanAnalyzer() {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [file, setFile] = React.useState(null);
   const [preview, setPreview] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [result, setResult] = React.useState(null);
   const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleFile = (f) => {
     setError(null);
@@ -17,26 +28,15 @@ export function FloorplanAnalyzer() {
   const analyze = async () => {
     if (!file) return;
 
-    const form = new FormData();
-    form.append("file", file);
-
     setLoading(true);
     setError(null);
     setResult(null);
 
     try {
-      const res = await fetch("/api/floorplan/analyze", {
-        method: "POST",
-        body: form,
-        credentials: "include",
-      });
-
-      if (!res.ok) throw new Error(await res.text());
-
-      const data = await res.json();
+      const data = await floorPlanAPI.analyze(file);
       setResult(data);
     } catch (e) {
-      setError(String(e.message));
+      setError(e.message || "Ошибка при анализе");
     } finally {
       setLoading(false);
     }
