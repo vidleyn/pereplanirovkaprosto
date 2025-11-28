@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .upload-area {
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        .upload-area:hover {
+            background: #e9ecef;
+            border-color: #0056b3;
+        }
+        .upload-area.dragover {
+            background: #cfe2ff;
+            border-color: #0056b3;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .result-card {
+            margin-top: 20px;
+            animation: slideIn 0.5s;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .stat-box {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .stat-box h3 {
+            margin: 0;
+            font-size: 2rem;
+            color: #007bff;
+        }
+        .stat-box p {
+            margin: 5px 0 0 0;
+            color: #6c757d;
+        }
+        .spinner-border-custom {
+            width: 3rem;
+            height: 3rem;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <!-- Шапка профиля -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Личный кабинет</h2>
+                <a href="/logout" class="btn btn-outline-danger">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Информация о пользователе -->
+        <div class="col-md-4">
+            <div th:if="${user != null}">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${user.username}">Username</h5>
+                        <hr>
+                        <p class="card-text">
+                            <strong>Email:</strong><br>
+                            <span th:text="${user.email} ?: 'Не указан'">email</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>Имя:</strong><br>
+                            <span th:text="${user.firstName} ?: 'Не указано'">firstName</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>Фамилия:</strong><br>
+                            <span th:text="${user.lastName} ?: 'Не указано'">lastName</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Статус сервиса -->
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Статус сервиса анализа</h6>
+                        <div id="serviceStatus">
+                            <span class="badge bg-secondary">Проверка...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${user == null}" class="alert alert-warning">
+                Данные пользователя не доступны
+            </div>
+        </div>
+
+        <!-- Анализ планировки -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Анализ планировки БТИ</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Область загрузки -->
+                    <div id="uploadArea" class="upload-area">
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-cloud-upload mb-3" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                        </svg>
+                        <h5>Перетащите изображение сюда</h5>
+                        <p class="text-muted">или нажмите для выбора файла</p>
+                        <p class="text-muted small">Поддерживаются: JPG, PNG (макс. 10MB)</p>
+                    </div>
+
+                    <!-- Превью изображения -->
+                    <div id="previewContainer" style="display: none;">
+                        <img id="preview" class="preview-image" alt="Preview">
+                        <div class="text-center mt-3">
+                            <button id="analyzeBtn" class="btn btn-primary btn-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-gear-fill me-2" viewBox="0 0 16 16">
+                                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                                </svg>
+                                Анализировать планировку
+                            </button>
+                            <button id="clearBtn" class="btn btn-outline-secondary btn-lg ms-2">Очистить</button>
+                        </div>
+                    </div>
+
+                    <!-- Результаты анализа -->
+                    <div id="results" style="display: none;" class="result-card">
+                        <hr>
+                        <h5 class="mb-3">Результаты анализа</h5>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="stat-box bg-light">
+                                    <h3 id="roomsCount">0</h3>
+                                    <p>Комнат</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-box bg-light">
+                                    <h3 id="wallsCount">0</h3>
+                                    <p>Стен</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-box bg-light">
+                                    <h3 id="cornersCount">0</h3>
+                                    <p>Углов</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-success mt-3">
+                            <strong>✓ Анализ завершен успешно!</strong>
+                            <p class="mb-0 mt-2">Blueprint3D данные готовы для использования.</p>
+                        </div>
+
+                        <!-- Blueprint3D данные -->
+                        <div class="mt-3">
+                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#blueprintData">
+                                Показать Blueprint3D JSON
+                            </button>
+                            <div class="collapse mt-3" id="blueprintData">
+                                <pre id="blueprintJson" style="background: #f8f9fa; padding: 15px; border-radius: 5px; max-height: 400px; overflow: auto;"></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ошибка -->
+                    <div id="errorMessage" style="display: none;" class="alert alert-danger mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay загрузки -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-content">
+        <div class="spinner-border spinner-border-custom text-light mb-3" role="status">
+            <span class="visually-hidden">Загрузка...</span>
+        </div>
+        <h4>Анализируем планировку...</h4>
+        <p>Это может занять несколько секунд</p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+    const preview = document.getElementById('preview');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const results = document.getElementById('results');
+    const errorMessage = document.getElementById('errorMessage');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    let selectedFile = null;
+
+    // Проверка статуса сервиса при загрузке
+    checkServiceHealth();
+
+    // Клик по области загрузки
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    // Drag & Drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+
+    // Выбор файла
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    // Обработка файла
+    function handleFile(file) {
+        if (!file.type.startsWith('image/')) {
+            showError('Пожалуйста, выберите изображение (JPG или PNG)');
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            showError('Файл слишком большой. Максимальный размер: 10MB');
+            return;
+        }
+
+        selectedFile = file;
+
+        // Показать превью
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            uploadArea.style.display = 'none';
+            previewContainer.style.display = 'block';
+            results.style.display = 'none';
+            errorMessage.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    analyzeBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    loadingOverlay.classList.add('active');
+    errorMessage.style.display = 'none';
+
+    try {
+        const response = await fetch('/api/floorplan/analyze', {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+        });
+
+        // Проверяем Content-Type ответа
+        const contentType = response.headers.get('content-type');
+
+        if (!contentType || !contentType.includes('application/json')) {
+            // Если не JSON - читаем как текст
+            const text = await response.text();
+            throw new Error('Сервер вернул не JSON: ' + text);
+        }
+
+        const data = await response.json();
+
+        if (!response.ok || data.status === 'error') {
+            throw new Error(data.message || 'Ошибка при анализе');
+        }
+
+        // Показать результаты
+        displayResults(data);
+
+    } catch (error) {
+        console.error('Полная ошибка:', error);
+        showError('Ошибка: ' + error.message);
+    } finally {
+        loadingOverlay.classList.remove('active');
+    }
+});
+
+    // Очистить
+    clearBtn.addEventListener('click', () => {
+        selectedFile = null;
+        fileInput.value = '';
+        uploadArea.style.display = 'block';
+        previewContainer.style.display = 'none';
+        results.style.display = 'none';
+        errorMessage.style.display = 'none';
+    });
+
+    // Отображение результатов
+    function displayResults(data) {
+        document.getElementById('roomsCount').textContent = data.statistics.rooms;
+        document.getElementById('wallsCount').textContent = data.statistics.walls;
+        document.getElementById('cornersCount').textContent = data.statistics.corners;
+        document.getElementById('blueprintJson').textContent = JSON.stringify(data.blueprint3d, null, 2);
+
+        results.style.display = 'block';
+    }
+
+    // Показать ошибку
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        results.style.display = 'none';
+    }
+
+    // Проверка статуса сервиса
+    async function checkServiceHealth() {
+        const statusEl = document.getElementById('serviceStatus');
+
+        try {
+            const response = await fetch('/api/floorplan/health');
+            const text = await response.text();
+
+            if (response.ok) {
+                statusEl.innerHTML = '<span class="badge bg-success">✓ Доступен</span>';
+            } else {
+                statusEl.innerHTML = '<span class="badge bg-danger">✗ Недоступен</span>';
+            }
+        } catch (error) {
+            statusEl.innerHTML = '<span class="badge bg-danger">✗ Ошибка подключения</span>';
+        }
+    }
+</script>
+</body>
+</html>
