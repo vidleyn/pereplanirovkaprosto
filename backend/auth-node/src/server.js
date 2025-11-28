@@ -2,9 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { User } from './models/User.js';
+import { Product } from './models/Product.js';
+import { Service } from './models/Service.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import floorPlanRoutes from './routes/floorPlanRoutes.js';
+import shopRoutes from './routes/shopRoutes.js';
+import servicesRoutes from './routes/servicesRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +36,8 @@ app.use((req, res, next) => {
 async function initializeDatabase() {
   try {
     await User.createTable();
+    await Product.createTable();
+    await Service.createTable();
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Error initializing database:', error);
@@ -43,6 +49,8 @@ async function initializeDatabase() {
 app.use('/api/auth', authRoutes);
 app.use('/', dashboardRoutes);
 app.use('/api/floorplan', floorPlanRoutes);
+app.use('/api/shop', shopRoutes);
+app.use('/api/services', servicesRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

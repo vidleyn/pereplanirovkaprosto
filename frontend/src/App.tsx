@@ -7,9 +7,11 @@ import Footer from "./containers/Footer";
 import Planner from "./containers/Home/Planner";
 import { Dashboard, LoginPage, RegisterPage } from "./pages/Auth";
 import { FloorplanAnalyzer } from "./pages/FloorplanAnalyzer";
-import { Contact } from "lucide-react";
 import Contacts from "./pages/contact";
 import Documentation from "./pages/Documentation";
+import AIChat from "./pages/AIChat";
+import Shop from "./pages/Shop";
+import Services from "./pages/Services";
 
 function App() {
   return (
@@ -63,6 +65,30 @@ function App() {
                 } 
               />
               <Route path="/contact" element={<Contacts />} />
+              <Route 
+                path="/chatbot" 
+                element={
+                  <ProtectedRoute>
+                    <AIChat />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/shop" 
+                element={
+                  <ProtectedRoute>
+                    <Shop />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/services" 
+                element={
+                  <ProtectedRoute>
+                    <Services />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
