@@ -27,7 +27,6 @@ public class RegisterRequest {
     private String lastName;
 
 
-
     public RegisterRequest() {}
 
     public RegisterRequest(String username, String email, String password, String firstName, String lastName) {
