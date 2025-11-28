@@ -176,3 +176,131 @@ export const floorPlanAPI = {
   },
 };
 
+// AI Chat API
+const AI_CHAT_URL = import.meta.env.VITE_AI_CHAT_URL || 'http://localhost:3004';
+
+export const aiChatAPI = {
+  // Отправка сообщения в AI чат
+  sendMessage: async (sessionId, message) => {
+    const response = await fetch(`${AI_CHAT_URL}/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        session_id: sessionId,
+        message: message,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Ошибка при отправке сообщения' }));
+      throw new Error(error.detail || error.message || 'Ошибка при отправке сообщения');
+    }
+
+    return await response.json();
+  },
+
+  // Проверка здоровья AI сервиса
+  checkHealth: async () => {
+    try {
+      const response = await fetch(`${AI_CHAT_URL}/health`);
+      return response.ok;
+    } catch {
+      return false;
+    }
+  },
+};
+
+// Shop API
+export const shopAPI = {
+  // Получить все товары
+  getProducts: async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.category) params.append('category', filters.category);
+    if (filters.search) params.append('search', filters.search);
+
+    const response = await fetch(`${API_BASE_URL}/api/shop/products?${params.toString()}`);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке товаров' }));
+      throw new Error(error.message || 'Ошибка при загрузке товаров');
+    }
+
+    const result = await response.json();
+    return result.data || [];
+  },
+
+  // Получить товар по ID
+  getProductById: async (id) => {
+    const response = await fetch(`${API_BASE_URL}/api/shop/products/${id}`);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Товар не найден' }));
+      throw new Error(error.message || 'Товар не найден');
+    }
+
+    const result = await response.json();
+    return result.data;
+  },
+
+  // Получить список категорий
+  getCategories: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/shop/categories`);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке категорий' }));
+      throw new Error(error.message || 'Ошибка при загрузке категорий');
+    }
+
+    const result = await response.json();
+    return result.data || [];
+  },
+};
+
+// Services API
+export const servicesAPI = {
+  // Получить все услуги
+  getServices: async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.category) params.append('category', filters.category);
+    if (filters.search) params.append('search', filters.search);
+
+    const response = await fetch(`${API_BASE_URL}/api/services/services?${params.toString()}`);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке услуг' }));
+      throw new Error(error.message || 'Ошибка при загрузке услуг');
+    }
+
+    const result = await response.json();
+    return result.data || [];
+  },
+
+  // Получить услугу по ID
+  getServiceById: async (id) => {
+    const response = await fetch(`${API_BASE_URL}/api/services/services/${id}`);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Услуга не найдена' }));
+      throw new Error(error.message || 'Услуга не найдена');
+    }
+
+    const result = await response.json();
+    return result.data;
+  },
+
+  // Получить список категорий
+  getCategories: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/services/categories`);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке категорий' }));
+      throw new Error(error.message || 'Ошибка при загрузке категорий');
+    }
+
+    const result = await response.json();
+    return result.data || [];
+  },
+};
+

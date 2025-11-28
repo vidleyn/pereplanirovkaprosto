@@ -4,7 +4,8 @@ import { useAuth } from "../contexts/AuthContext";
 const navItems = [
   { label: "Планировщик", href: "/planner" },
   { label: "Справочник", href: "/documentation" },
-  { label: "Блог", href: "/blog" },
+  { label: "Услуги", href: "/services" },
+  { label: "Магазин", href: "/shop" },
   { label: "Чат-бот", href: "/chatbot" },
   { label: "Контакты", href: "/contact" },
 ];
