@@ -37,6 +37,12 @@ export default function Hero() {
               Перейти в планировщик
             </Link>
             <Link
+              to="/floorplan-analyzer"
+              className="rounded-md bg-green-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow hover:bg-green-400 transition"
+            >
+              Анализ планировки БТИ
+            </Link>
+            <Link
               to="/documentation"
               className="text-gray-300 hover:text-white text-sm flex items-center transition"
             >
