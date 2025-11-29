@@ -12,6 +12,7 @@ import Documentation from "./pages/Documentation";
 import AIChat from "./pages/AIChat";
 import Shop from "./pages/Shop";
 import Services from "./pages/Services";
+import Articles from "./pages/Articles";
 
 function App() {
   return (
@@ -86,6 +87,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Services />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/articles" 
+                element={
+                  <ProtectedRoute>
+                    <Articles />
                   </ProtectedRoute>
                 } 
               />

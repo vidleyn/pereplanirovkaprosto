@@ -2,7 +2,7 @@ import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import postcss from 'rollup-plugin-postcss';
-import serve from 'rollup-plugin-serve';
+import serve from './node_modules/rollup-plugin-serve';
 import terser from '@rollup/plugin-terser';
 import cssnano from 'cssnano';
 import commonjs from '@rollup/plugin-commonjs';
