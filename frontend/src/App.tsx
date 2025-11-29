@@ -24,14 +24,7 @@ function AppContent() {
 
       <main className="flex-grow">
         <Routes>
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } 
-          />
+          <Route path="/" element={<Home />} />
           <Route 
             path="/planner" 
             element={
