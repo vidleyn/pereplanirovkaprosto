@@ -37,26 +37,11 @@ export default function Hero() {
               Перейти в планировщик
             </Link>
             <Link
-              to="/dashboard"
-              className="flex items-center gap-2 rounded-md bg-white/10 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition backdrop-blur-sm"
+              to="/documentation"
+              className="text-gray-300 hover:text-white text-sm flex items-center transition"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {user?.username ? `Профиль: ${user.username}` : "Мой профиль"}
-            </Link>
-            <a href="#more" className="text-gray-300 hover:text-white text-sm flex items-center transition">
               Подробнее →
-            </a>
+            </Link>
           </div>
         </div>
 

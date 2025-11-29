@@ -6,6 +6,7 @@ const navItems = [
   { label: "Справочник", href: "/documentation" },
   { label: "Услуги", href: "/services" },
   { label: "Магазин", href: "/shop" },
+  { label: "Статьи", href: "/articles" },
   { label: "Чат-бот", href: "/chatbot" },
   { label: "Контакты", href: "/contact" },
 ];
