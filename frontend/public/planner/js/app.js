@@ -41,12 +41,18 @@ var ViewerFloorplanner = function (blueprint3d) {
         $(draw).removeClass(activeStlye);
         $(remove).removeClass(activeStlye);
         $(move).removeClass(activeStlye);
+        $("#add-door").removeClass(activeStlye);
+        $("#add-window").removeClass(activeStlye);
         if (mode == BP3DJS.floorplannerModes.MOVE) {
           $(move).addClass(activeStlye);
         } else if (mode == BP3DJS.floorplannerModes.DRAW) {
           $(draw).addClass(activeStlye);
         } else if (mode == BP3DJS.floorplannerModes.DELETE) {
           $(remove).addClass(activeStlye);
+        } else if (mode == BP3DJS.floorplannerModes.ADD_DOOR) {
+          $("#add-door").addClass(activeStlye);
+        } else if (mode == BP3DJS.floorplannerModes.ADD_WINDOW) {
+          $("#add-window").addClass(activeStlye);
         }
 
         if (mode == BP3DJS.floorplannerModes.DRAW) {
@@ -68,6 +74,14 @@ var ViewerFloorplanner = function (blueprint3d) {
 
     $(remove).click(function () {
       scope.floorplanner.setMode(BP3DJS.floorplannerModes.DELETE);
+    });
+
+    $("#add-door").click(function () {
+      scope.floorplanner.setMode(BP3DJS.floorplannerModes.ADD_DOOR);
+    });
+
+    $("#add-window").click(function () {
+      scope.floorplanner.setMode(BP3DJS.floorplannerModes.ADD_WINDOW);
     });
   }
 
