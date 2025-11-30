@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useState, useEffect } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 function DocumentationContent() {

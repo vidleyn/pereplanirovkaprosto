@@ -1,10 +1,8 @@
-import React from "react";
-
 interface MainControlsProps {
-  blueprint3d: any;
+  blueprint3d?: any;
 }
 
-export default function MainControls({ blueprint3d }: MainControlsProps) {
+export default function MainControls(_props: MainControlsProps) {
   return (
     <div id="main-controls" className="fixed top-6 left-6 z-50">
       {/* Все кнопки в одной строке */}

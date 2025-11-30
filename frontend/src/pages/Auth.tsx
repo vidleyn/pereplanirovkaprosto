@@ -7,6 +7,11 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
 
 // --- Login Page ---
+interface LoginFormData {
+  username: string;
+  password: string;
+}
+
 export function LoginPage() {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
@@ -16,7 +21,7 @@ export function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginFormData>();
 
   // Перенаправление если уже авторизован
   React.useEffect(() => {
@@ -25,14 +30,14 @@ export function LoginPage() {
     }
   }, [isAuthenticated, navigate]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: LoginFormData) => {
     setError("");
     setLoading(true);
     try {
       await login(data.username, data.password);
       navigate("/");
     } catch (err) {
-      setError(err.message || "Неверный логин или пароль");
+      setError((err instanceof Error ? err.message : null) || "Неверный логин или пароль");
     } finally {
       setLoading(false);
     }
@@ -74,7 +79,7 @@ export function LoginPage() {
               />
               {errors.username && (
                 <p className="text-red-400 text-sm mt-2">
-                  {errors.username.message}
+                  {String(errors.username.message || "")}
                 </p>
               )}
             </div>
@@ -89,7 +94,7 @@ export function LoginPage() {
               />
               {errors.password && (
                 <p className="text-red-400 text-sm mt-2">
-                  {errors.password.message}
+                  {String(errors.password.message || "")}
                 </p>
               )}
             </div>
@@ -147,6 +152,14 @@ export function LoginPage() {
   );
 }
 
+interface RegisterFormData {
+  username: string;
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 // --- Register Page ---
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -157,7 +170,7 @@ export function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<RegisterFormData>();
 
   // Перенаправление если уже авторизован
   React.useEffect(() => {
@@ -166,7 +179,7 @@ export function RegisterPage() {
     }
   }, [isAuthenticated, navigate]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: RegisterFormData) => {
     setError("");
     setLoading(true);
     try {
@@ -179,7 +192,7 @@ export function RegisterPage() {
       });
       navigate("/login");
     } catch (err) {
-      setError(err.message || "Ошибка при регистрации");
+      setError((err instanceof Error ? err.message : null) || "Ошибка при регистрации");
     } finally {
       setLoading(false);
     }
@@ -225,7 +238,7 @@ export function RegisterPage() {
                   })}
                 />
                 {errors.username && (
-                  <p className="text-red-400 text-sm mt-2">{errors.username.message}</p>
+                  <p className="text-red-400 text-sm mt-2">{String(errors.username.message || "")}</p>
                 )}
               </div>
 
@@ -238,7 +251,7 @@ export function RegisterPage() {
                   {...register("email", { required: "Введите email" })}
                 />
                 {errors.email && (
-                  <p className="text-red-400 text-sm mt-2">{errors.email.message}</p>
+                  <p className="text-red-400 text-sm mt-2">{String(errors.email.message || "")}</p>
                 )}
               </div>
             </div>
@@ -252,7 +265,7 @@ export function RegisterPage() {
                 {...register("password", { required: "Введите пароль" })}
               />
               {errors.password && (
-                <p className="text-red-400 text-sm mt-2">{errors.password.message}</p>
+                <p className="text-red-400 text-sm mt-2">{String(errors.password.message || "")}</p>
               )}
             </div>
 
@@ -333,7 +346,7 @@ export function RegisterPage() {
 export function Dashboard() {
   const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
-  const [dashboardData, setDashboardData] = React.useState(null);
+  const [dashboardData, setDashboardData] = React.useState<any>(null);
 
   React.useEffect(() => {
     const fetchDashboard = async () => {
@@ -372,7 +385,7 @@ export function Dashboard() {
     return null;
   }
 
-  const userData = dashboardData?.user || user;
+  const userData = (dashboardData as any)?.user || user;
 
   return (
     <section className="relative bg-[#0B0F19] text-white overflow-hidden min-h-screen">

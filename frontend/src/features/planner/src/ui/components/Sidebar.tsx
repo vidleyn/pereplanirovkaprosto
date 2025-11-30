@@ -38,7 +38,7 @@ export default function Sidebar({
   const [cameraLocked, setCameraLocked] = useState(false);
 
   // 2D Editor settings
-  const [wallInfo, setWallInfo] = useState({
+  const [_wallInfo, _setWallInfo] = useState({
     exterior: false,
     interior: false,
     midline: false,
