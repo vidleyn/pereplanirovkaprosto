@@ -26,7 +26,8 @@ export default function NotFound() {
                 Страница не найдена
               </h2>
               <p className="text-gray-300 text-lg mb-8">
-                К сожалению, страница, которую вы ищете, не существует или была перемещена.
+                К сожалению, страница, которую вы ищете, не существует или была
+                перемещена.
               </p>
             </div>
 
@@ -64,4 +65,3 @@ export default function NotFound() {
     </section>
   );
 }
-

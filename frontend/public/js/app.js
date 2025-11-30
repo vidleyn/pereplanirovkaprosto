@@ -85,7 +85,7 @@ var mainControls = function (blueprint3d) {
   async function newDesign() {
     if (!myhome) {
       try {
-        var response = await fetch("/data/myhome.json");
+        var response = await fetch("/data/myhome2.json");
         var data = await response.json();
         myhome = JSON.stringify(data);
       } catch (error) {
@@ -1072,7 +1072,7 @@ $(document).ready(function () {
   // Загрузка начальных данных из JSON файла
   (async function () {
     try {
-      var response = await fetch("/data/myhome.json");
+      var response = await fetch("/data/myhome2.json");
       var data = await response.json();
       myhome = JSON.stringify(data);
       blueprint3d.model.loadSerialized(myhome);
