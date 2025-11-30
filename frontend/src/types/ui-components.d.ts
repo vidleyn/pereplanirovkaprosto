@@ -51,7 +51,9 @@ declare module '@radix-ui/react-collapsible' {
   export default content;
   export const Root: any;
   export const Trigger: any;
+  export const CollapsibleTrigger: any;
   export const Content: any;
+  export const CollapsibleContent: any;
 }
 
 declare module '@radix-ui/react-context-menu' {
@@ -69,6 +71,9 @@ declare module '@radix-ui/react-context-menu' {
   export const Sub: any;
   export const SubTrigger: any;
   export const SubContent: any;
+  export const Group: any;
+  export const RadioGroup: any;
+  export const ItemIndicator: any;
 }
 
 declare module '@radix-ui/react-dialog' {
@@ -99,6 +104,9 @@ declare module '@radix-ui/react-dropdown-menu' {
   export const Sub: any;
   export const SubTrigger: any;
   export const SubContent: any;
+  export const Group: any;
+  export const RadioGroup: any;
+  export const ItemIndicator: any;
 }
 
 declare module '@radix-ui/react-hover-card' {
@@ -132,6 +140,9 @@ declare module '@radix-ui/react-menubar' {
   export const Sub: any;
   export const SubTrigger: any;
   export const SubContent: any;
+  export const Group: any;
+  export const RadioGroup: any;
+  export const ItemIndicator: any;
 }
 
 declare module '@radix-ui/react-navigation-menu' {
@@ -155,6 +166,7 @@ declare module '@radix-ui/react-popover' {
   export const Portal: any;
   export const Content: any;
   export const Close: any;
+  export const Anchor: any;
 }
 
 declare module '@radix-ui/react-progress' {
@@ -178,7 +190,10 @@ declare module '@radix-ui/react-scroll-area' {
   export const Root: any;
   export const Viewport: any;
   export const Scrollbar: any;
+  export const ScrollAreaScrollbar: any;
   export const Thumb: any;
+  export const ScrollAreaThumb: any;
+  export const Corner: any;
 }
 
 declare module '@radix-ui/react-select' {
@@ -197,6 +212,8 @@ declare module '@radix-ui/react-select' {
   export const ScrollUpButton: any;
   export const ScrollDownButton: any;
   export const Viewport: any;
+  export const Value: any;
+  export const Icon: any;
 }
 
 declare module '@radix-ui/react-separator' {
@@ -255,6 +272,7 @@ declare module '@radix-ui/react-tooltip' {
   export const Portal: any;
   export const Provider: any;
   export const Content: any;
+  export const Arrow: any;
 }
 
 declare module 'class-variance-authority' {
@@ -279,10 +297,11 @@ declare module 'react-day-picker' {
 }
 
 declare module 'embla-carousel-react' {
-  export const useEmblaCarousel: any;
+  const useEmblaCarousel: (options?: any, plugins?: any[]) => [any, any];
+  export default useEmblaCarousel;
   export type EmblaOptionsType = any;
   export type EmblaPluginType = any;
-  export type UseEmblaCarouselType = any;
+  export type UseEmblaCarouselType = [any, any];
 }
 
 declare module 'recharts' {
@@ -301,6 +320,26 @@ declare module 'recharts' {
   export const Area: any;
   export const Cell: any;
   export const ResponsiveContainer: any;
+  export namespace RechartsPrimitive {
+    export interface LegendProps {
+      payload?: any;
+      verticalAlign?: any;
+      [key: string]: any;
+    }
+    export const LineChart: any;
+    export const BarChart: any;
+    export const PieChart: any;
+    export const AreaChart: any;
+    export const XAxis: any;
+    export const YAxis: any;
+    export const CartesianGrid: any;
+    export const Tooltip: any;
+    export const Legend: any;
+    export const Line: any;
+    export const Bar: any;
+    export const Pie: any;
+    export const Area: any;
+  }
 }
 
 declare module 'cmdk' {

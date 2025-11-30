@@ -11,7 +11,20 @@ export default function LegacyBootstrap() {
       // jQuery-based event handlers so we can handle them in React.
       // @ts-ignore
       window.USE_REACT_CONTROLS = true;
+      
+      // Wait a bit for DOM to be fully ready
+      await new Promise(resolve => {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          setTimeout(resolve, 0);
+        } else {
+          document.addEventListener('DOMContentLoaded', resolve);
+        }
+      });
+      
       try {
+        // Добавляем небольшую задержку для обеспечения полной инициализации DOM
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         // Используем относительный путь - Vite должен его разрешить
         // @ts-expect-error - динамический импорт JS модуля из TS
         const mod = await import("../../scripts/blueprint.js");
@@ -20,11 +33,31 @@ export default function LegacyBootstrap() {
 
         // blueprint module exports BlueprintJS (named export)
         if (mod && mod.BlueprintJS) {
+          // Wait for DOM elements to be ready
+          await new Promise(resolve => {
+            const checkElements = () => {
+              const floorplannerEl = document.getElementById('floorplanner-canvas');
+              const viewerEl = document.querySelector('#viewer');
+              if (floorplannerEl && viewerEl) {
+                resolve(void 0);
+              } else {
+                setTimeout(checkElements, 50);
+              }
+            };
+            checkElements();
+          });
+          
           // Create an instance and attach to DOM elements already present
           const Blueprint = mod.BlueprintJS;
+          
           // expose the module as a global for legacy code compatibility
+          // Делаем это после проверки DOM, но до создания экземпляра
           // @ts-ignore
           window.BP3DJS = mod;
+          
+          // Дополнительная задержка для полной инициализации модуля
+          await new Promise(resolve => setTimeout(resolve, 50));
+          
           // opts similar to original
           const opts = {
             floorplannerElement: "floorplanner-canvas",

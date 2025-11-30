@@ -30,8 +30,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "public/js", "public/models"],
-  "exclude": [
-    "src/pages/components/ui/**/*"
-  ]
+  "include": ["src", "public/js", "public/models"]
 }
