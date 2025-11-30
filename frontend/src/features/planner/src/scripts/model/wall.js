@@ -11,7 +11,7 @@ import { Utils } from "../core/utils.js";
 
 /** The default wall texture. */
 export const defaultWallTexture = {
-  url: "/planner/rooms/textures/wallmap.png",
+  url: "/rooms/textures/wallmap.png",
   stretch: true,
   scale: 0,
 };

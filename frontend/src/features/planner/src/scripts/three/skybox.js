@@ -10,7 +10,7 @@ export class Skybox extends EventDispatcher
 	{
 		super();
 		
-		this.defaultEnvironment = '/planner/rooms/textures/envs/Garden.png';
+		this.defaultEnvironment = '/rooms/textures/envs/Garden.png';
 		this.useEnvironment = false;
 		this.topColor = 0x92b2ce;//0xe9e9e9; //0xf9f9f9;//0x565e63
 		this.bottomColor = 0xffffff;//0xD8ECF9
@@ -42,7 +42,7 @@ export class Skybox extends EventDispatcher
 //		this.sky.position.x += this.sphereRadius*0.5;
 		
 		
-		var groundT = new TextureLoader().load('/planner/rooms/textures/Ground_4K.jpg', function(){});		
+		var groundT = new TextureLoader().load('/rooms/textures/Ground_4K.jpg', function(){});		
 		groundT.wrapS = groundT.wrapT = RepeatWrapping;
 		groundT.repeat.set(10,10);
 		
@@ -53,7 +53,7 @@ export class Skybox extends EventDispatcher
 		this.ground.rotateX(-Math.PI * 0.5);
 		this.ground.position.y = -1;
 		
-		this.groundSceneReflector = new GroundSceneReflector(this.ground, this.renderer, this.scene,{textureOne:'/planner/rooms/textures/Ground_4K.jpg', textureTwo:'/planner/rooms/textures/GroundRough.jpg', wrapOne:{x:40, y:40}, wrapTwo:{x:50, y:50}, textureWidth: 512, textureHeight: 512, intensity: 0.1, blendIntensity: 0.05});
+		this.groundSceneReflector = new GroundSceneReflector(this.ground, this.renderer, this.scene,{textureOne:'/rooms/textures/Ground_4K.jpg', textureTwo:'/rooms/textures/GroundRough.jpg', wrapOne:{x:40, y:40}, wrapTwo:{x:50, y:50}, textureWidth: 512, textureHeight: 512, intensity: 0.1, blendIntensity: 0.05});
 		
 		this.scene.add(this.sky);
 		this.scene.add(this.ground);

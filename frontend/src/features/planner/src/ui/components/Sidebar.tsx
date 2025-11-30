@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface SidebarProps {
   blueprint3d: any;
@@ -14,7 +14,11 @@ interface UnitConfig {
   e: boolean; // meters
 }
 
-export default function Sidebar({ blueprint3d, isOpen, onToggle }: SidebarProps) {
+export default function Sidebar({
+  blueprint3d,
+  isOpen,
+  onToggle,
+}: SidebarProps) {
   const [units, setUnits] = useState<UnitConfig>({
     a: false,
     b: false,
@@ -50,17 +54,25 @@ export default function Sidebar({ blueprint3d, isOpen, onToggle }: SidebarProps)
     if (!blueprint3d || !BP3DJS) return;
 
     // Initialize from current configuration
-    const currentUnit = BP3DJS.Configuration.getStringValue(BP3DJS.configDimUnit);
+    const currentUnit = BP3DJS.Configuration.getStringValue(
+      BP3DJS.configDimUnit
+    );
     const unitMap: Record<string, keyof UnitConfig> = {
-      [BP3DJS.dimFeetAndInch]: 'a',
-      [BP3DJS.dimInch]: 'b',
-      [BP3DJS.dimCentiMeter]: 'c',
-      [BP3DJS.dimMilliMeter]: 'd',
-      [BP3DJS.dimMeter]: 'e',
+      [BP3DJS.dimFeetAndInch]: "a",
+      [BP3DJS.dimInch]: "b",
+      [BP3DJS.dimCentiMeter]: "c",
+      [BP3DJS.dimMilliMeter]: "d",
+      [BP3DJS.dimMeter]: "e",
     };
 
     if (unitMap[currentUnit]) {
-      const newUnits: UnitConfig = { a: false, b: false, c: false, d: false, e: false };
+      const newUnits: UnitConfig = {
+        a: false,
+        b: false,
+        c: false,
+        d: false,
+        e: false,
+      };
       newUnits[unitMap[currentUnit]] = true;
       setUnits(newUnits);
     }
@@ -83,7 +95,13 @@ export default function Sidebar({ blueprint3d, isOpen, onToggle }: SidebarProps)
   const handleUnitChange = (unit: keyof UnitConfig) => {
     if (!BP3DJS || !blueprint3d) return;
 
-    const newUnits: UnitConfig = { a: false, b: false, c: false, d: false, e: false };
+    const newUnits: UnitConfig = {
+      a: false,
+      b: false,
+      c: false,
+      d: false,
+      e: false,
+    };
     newUnits[unit] = true;
     setUnits(newUnits);
 
@@ -157,145 +175,169 @@ export default function Sidebar({ blueprint3d, isOpen, onToggle }: SidebarProps)
     setCameraRatio2(1);
   };
 
-  const currentUnit = BP3DJS?.Configuration?.getStringValue(BP3DJS?.configDimUnit) || 'm';
-
-  if (!isOpen) {
-    return (
-      <button
-        onClick={onToggle}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-[1000] px-2 py-2.5 bg-gray-800 text-white border-none cursor-pointer rounded-l-md hover:bg-gray-700 transition-colors"
-        title="Открыть настройки"
-      >
-        <span className="glyphicon glyphicon-cog" />
-      </button>
-    );
-  }
+  const currentUnit =
+    BP3DJS?.Configuration?.getStringValue(BP3DJS?.configDimUnit) || "m";
 
   return (
-    <div className="fixed right-0 top-0 w-80 h-screen bg-[#2d2d2d] text-white overflow-y-auto z-[1000] shadow-[-2px_0_10px_rgba(0,0,0,0.3)] text-sm">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-600 flex justify-between items-center">
-        <h2 className="m-0 text-lg font-semibold">Интерфейс и настройки</h2>
-        <button
-          onClick={onToggle}
-          className="bg-transparent border-none text-white cursor-pointer text-xl px-1 hover:text-gray-300 transition-colors"
-        >
-          ×
-        </button>
+    <>
+      {/* Sidebar */}
+      <div
+        className={`h-full bg-white/95 backdrop-blur-md border-l border-gray-200 shadow-2xl overflow-y-auto transition-all duration-300 ease-in-out ${
+          isOpen ? "w-80 opacity-100" : "w-0 opacity-0 overflow-hidden"
+        }`}
+      >
+        {isOpen && (
+          <div className="p-5!">
+            {/* Header */}
+            <div className="mb-6 pb-4 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="m-0 text-xl font-bold text-gray-800">Настройки</h2>
+              <button
+                onClick={onToggle}
+                className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                title="Закрыть"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Units Section */}
+            <Section title="Единицы измерения">
+              <RadioGroup
+                options={[
+                  { value: "a", label: "Футы и дюймы" },
+                  { value: "b", label: "Дюймы" },
+                  { value: "c", label: "Сантиметры" },
+                  { value: "d", label: "Миллиметры" },
+                  { value: "e", label: "Метры" },
+                ]}
+                selected={
+                  Object.keys(units).find(
+                    (k) => units[k as keyof UnitConfig]
+                  ) || "e"
+                }
+                onChange={(value) =>
+                  handleUnitChange(value as keyof UnitConfig)
+                }
+              />
+            </Section>
+
+            {/* 2D Editor Section */}
+            <Section title="2D Редактор">
+              <Checkbox
+                label="Привязка к сетке"
+                checked={snapToGrid}
+                onChange={handleSnapToGridChange}
+              />
+              <NumberInput
+                label={`Шаг привязки (${currentUnit})`}
+                value={snapValue}
+                onChange={handleSnapValueChange}
+                min={0.1}
+                step={0.1}
+              />
+              <NumberInput
+                label={`Разрешение сетки (${currentUnit})`}
+                value={gridResolution}
+                onChange={handleGridResolutionChange}
+                min={0.1}
+                step={0.1}
+              />
+              <Slider
+                label="Масштаб"
+                value={scale}
+                onChange={handleScaleChange}
+                min={0.25}
+                max={5}
+                step={0.25}
+              />
+
+              <SubSection title="Измерения стен">
+                <Checkbox
+                  label="Внешние"
+                  checked={wallInfo.exterior}
+                  onChange={(v) => setWallInfo({ ...wallInfo, exterior: v })}
+                />
+                <Checkbox
+                  label="Внутренние"
+                  checked={wallInfo.interior}
+                  onChange={(v) => setWallInfo({ ...wallInfo, interior: v })}
+                />
+                <Checkbox
+                  label="Средняя линия"
+                  checked={wallInfo.midline}
+                  onChange={(v) => setWallInfo({ ...wallInfo, midline: v })}
+                />
+                <Checkbox
+                  label="Подписи"
+                  checked={wallInfo.labels}
+                  onChange={(v) => setWallInfo({ ...wallInfo, labels: v })}
+                />
+              </SubSection>
+            </Section>
+
+            {/* 3D Editor Section */}
+            <Section title="3D Редактор">
+              <SubSection title="Ограничения камеры">
+                <Slider
+                  label="Диапазон"
+                  value={cameraRatio}
+                  onChange={handleCameraRatioChange}
+                  min={-1}
+                  max={1}
+                  step={0.01}
+                />
+                <Slider
+                  label="Диапазон 2"
+                  value={cameraRatio2}
+                  onChange={handleCameraRatio2Change}
+                  min={-1}
+                  max={1}
+                  step={0.01}
+                />
+                <Checkbox
+                  label="Заблокировать вид"
+                  checked={cameraLocked}
+                  onChange={handleCameraLockChange}
+                />
+                <button
+                  onClick={handleCameraReset}
+                  className="w-full py-2.5 mt-3 bg-gray-100 text-gray-700 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-200 hover:scale-105 transition-all duration-200 font-medium"
+                >
+                  Сбросить
+                </button>
+              </SubSection>
+            </Section>
+          </div>
+        )}
       </div>
-
-      <div className="p-4">
-        {/* Units Section */}
-        <Section title="Единицы измерения">
-          <RadioGroup
-            options={[
-              { value: 'a', label: "Футы и дюймы" },
-              { value: 'b', label: "Дюймы" },
-              { value: 'c', label: 'Сантиметры' },
-              { value: 'd', label: 'Миллиметры' },
-              { value: 'e', label: 'Метры' },
-            ]}
-            selected={Object.keys(units).find((k) => units[k as keyof UnitConfig]) || 'e'}
-            onChange={(value) => handleUnitChange(value as keyof UnitConfig)}
-          />
-        </Section>
-
-        {/* 2D Editor Section */}
-        <Section title="2D Редактор">
-          <Checkbox
-            label="Привязка к сетке"
-            checked={snapToGrid}
-            onChange={handleSnapToGridChange}
-          />
-          <NumberInput
-            label={`Шаг привязки (${currentUnit})`}
-            value={snapValue}
-            onChange={handleSnapValueChange}
-            min={0.1}
-            step={0.1}
-          />
-          <NumberInput
-            label={`Разрешение сетки (${currentUnit})`}
-            value={gridResolution}
-            onChange={handleGridResolutionChange}
-            min={0.1}
-            step={0.1}
-          />
-          <Slider
-            label="Масштаб"
-            value={scale}
-            onChange={handleScaleChange}
-            min={0.25}
-            max={5}
-            step={0.25}
-          />
-
-          <SubSection title="Измерения стен">
-            <Checkbox
-              label="Внешние"
-              checked={wallInfo.exterior}
-              onChange={(v) => setWallInfo({ ...wallInfo, exterior: v })}
-            />
-            <Checkbox
-              label="Внутренние"
-              checked={wallInfo.interior}
-              onChange={(v) => setWallInfo({ ...wallInfo, interior: v })}
-            />
-            <Checkbox
-              label="Средняя линия"
-              checked={wallInfo.midline}
-              onChange={(v) => setWallInfo({ ...wallInfo, midline: v })}
-            />
-            <Checkbox
-              label="Подписи"
-              checked={wallInfo.labels}
-              onChange={(v) => setWallInfo({ ...wallInfo, labels: v })}
-            />
-          </SubSection>
-        </Section>
-
-        {/* 3D Editor Section */}
-        <Section title="3D Редактор">
-          <SubSection title="Ограничения камеры">
-            <Slider
-              label="Диапазон"
-              value={cameraRatio}
-              onChange={handleCameraRatioChange}
-              min={-1}
-              max={1}
-              step={0.01}
-            />
-            <Slider
-              label="Диапазон 2"
-              value={cameraRatio2}
-              onChange={handleCameraRatio2Change}
-              min={-1}
-              max={1}
-              step={0.01}
-            />
-            <Checkbox
-              label="Заблокировать вид"
-              checked={cameraLocked}
-              onChange={handleCameraLockChange}
-            />
-            <button
-              onClick={handleCameraReset}
-              className="w-full py-2 mt-2.5 bg-gray-600 text-white border-none rounded cursor-pointer hover:bg-gray-500 transition-colors"
-            >
-              Сбросить
-            </button>
-          </SubSection>
-        </Section>
-      </div>
-    </div>
+    </>
   );
 }
 
 // Helper Components
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="mb-5">
-      <h3 className="m-0 mb-2.5 text-base text-blue-400 font-bold">
+    <div className="mb-6">
+      <h3 className="m-0 mb-3 text-base text-gray-800 font-semibold">
         {title}
       </h3>
       {children}
@@ -303,10 +345,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function SubSection({ title, children }: { title: string; children: React.ReactNode }) {
+function SubSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="ml-4 mt-2.5 mb-2.5">
-      <h4 className="m-0 mb-2 text-sm text-gray-400">{title}</h4>
+    <div className="ml-4 mt-3 mb-3">
+      <h4 className="m-0 mb-2 text-sm text-gray-600 font-medium">{title}</h4>
       {children}
     </div>
   );
@@ -322,14 +370,14 @@ function RadioGroup({
   onChange: (value: string) => void;
 }) {
   return (
-    <div>
+    <div className="space-y-1">
       {options.map((opt) => (
         <label
           key={opt.value}
-          className={`block p-2 cursor-pointer rounded mb-1 transition-colors ${
+          className={`flex items-center p-3 cursor-pointer rounded-xl mb-1 transition-all duration-200 ${
             selected === opt.value
-              ? 'bg-blue-500 hover:bg-blue-600'
-              : 'hover:bg-gray-700'
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
+              : "bg-gray-50 text-gray-700 hover:bg-gray-100"
           }`}
         >
           <input
@@ -339,7 +387,7 @@ function RadioGroup({
             onChange={() => onChange(opt.value)}
             className="mr-2"
           />
-          {opt.label}
+          <span className="text-sm font-medium">{opt.label}</span>
         </label>
       ))}
     </div>
@@ -356,14 +404,14 @@ function Checkbox({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <label className="flex items-center p-2 cursor-pointer rounded mb-1 hover:bg-gray-700 transition-colors">
+    <label className="flex items-center p-3 cursor-pointer rounded-xl mb-2 bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all duration-200">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mr-2"
+        className="mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
       />
-      {label}
+      <span className="text-sm font-medium">{label}</span>
     </label>
   );
 }
@@ -382,15 +430,17 @@ function NumberInput({
   step?: number;
 }) {
   return (
-    <div className="mb-2.5">
-      <label className="block mb-1.5 text-xs">{label}</label>
+    <div className="mb-4">
+      <label className="block mb-2 text-sm text-gray-700 font-medium">
+        {label}
+      </label>
       <input
         type="number"
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
         min={min}
         step={step}
-        className="w-full px-1.5 py-1.5 bg-[#1a1a1a] border border-gray-600 rounded text-white focus:outline-none focus:border-blue-500"
+        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
       />
     </div>
   );
@@ -413,8 +463,9 @@ function Slider({
 }) {
   return (
     <div className="mb-4">
-      <label className="block mb-1.5 text-xs">
-        {label}: {value.toFixed(2)}
+      <label className="block mb-2 text-sm text-gray-700 font-medium">
+        {label}:{" "}
+        <span className="text-blue-600 font-semibold">{value.toFixed(2)}</span>
       </label>
       <input
         type="range"
@@ -423,7 +474,7 @@ function Slider({
         min={min}
         max={max}
         step={step}
-        className="w-full"
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
       />
     </div>
   );

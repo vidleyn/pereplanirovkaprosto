@@ -4,157 +4,199 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Architect3D — Unified Dev (React + legacy)</title>
-    <!-- include legacy styles so the original UI keeps its look when fallback is used -->
-    <link rel="stylesheet" href="/css/jquery-ui.css" />
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <!-- app.css now imported via Vite from src/styles/app.css -->
   </head>
   <body>
     <div id="root"></div>
 
     <!-- Legacy UI: add-items modal only (controls moved to React components)
          Scripts for legacy behaviour are loaded by the unified loader at runtime (src/main.tsx). -->
-    <div id="interfaces" class="card" style="display: none">
+    <div id="interfaces" style="display: none">
       <!-- Legacy container for backward compatibility, hidden by default -->
     </div>
 
-    <!-- Add Items -->
-    <div class="modal fade" id="add-items-modal" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              &times;
-            </button>
-            <h4 class="modal-title">Furniture Inventory</h4>
+    <!-- Add Items Modal - Tailwind CSS version -->
+    <div id="add-items-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+      <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" id="modal-backdrop"></div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+          <!-- Header -->
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                Furniture Inventory
+              </h3>
+              <button
+                type="button"
+                class="text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition-colors"
+                id="modal-close-btn"
+                aria-label="Close"
+              >
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
-          <div class="modal-body">
-            <div id="add-items" class="panel-group">
-              <div id="floor-items" class="panel panel-default">
-                <div id="floor-items-header" class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
+
+          <!-- Body -->
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pt-4">
+            <div id="add-items" class="space-y-2">
+              <!-- Floor Items -->
+              <div id="floor-items" class="border border-gray-200 rounded-lg">
+                <div id="floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <h4 class="text-base font-medium text-gray-900">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full text-left"
                       data-toggle="collapse"
-                      data-parent="#add-items"
-                      href="#floor-items-body"
-                      >Floor Items</a
+                      data-target="#floor-items-body"
                     >
+                      <span>Floor Items</span>
+                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </h4>
                 </div>
-                <div
-                  id="floor-items-body"
-                  class="panel-collapse collapse inventory-content"
-                >
-                  <div class="row panel-body" id="floor-items-wrapper">
+                <div id="floor-items-body" class="hidden p-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="floor-items-wrapper">
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
 
-              <div id="wall-items" class="panel panel-default">
-                <div id="wall-items-header" class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
+              <!-- Wall Items -->
+              <div id="wall-items" class="border border-gray-200 rounded-lg">
+                <div id="wall-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <h4 class="text-base font-medium text-gray-900">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full text-left"
                       data-toggle="collapse"
-                      data-parent="#add-items"
-                      href="#wall-items-body"
-                      >Wall Items</a
+                      data-target="#wall-items-body"
                     >
+                      <span>Wall Items</span>
+                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </h4>
                 </div>
-                <div
-                  id="wall-items-body"
-                  class="panel-collapse collapse inventory-content"
-                >
-                  <div class="row panel-body" id="wall-items-wrapper">
+                <div id="wall-items-body" class="hidden p-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="wall-items-wrapper">
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
-              <div id="in-wall-items" class="panel panel-default">
-                <div id="in-wall-items-header" class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
+
+              <!-- In Wall Items -->
+              <div id="in-wall-items" class="border border-gray-200 rounded-lg">
+                <div id="in-wall-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <h4 class="text-base font-medium text-gray-900">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full text-left"
                       data-toggle="collapse"
-                      data-parent="#add-items"
-                      href="#in-wall-items-body"
-                      >In Wall Items</a
+                      data-target="#in-wall-items-body"
                     >
+                      <span>In Wall Items</span>
+                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </h4>
                 </div>
-                <div
-                  id="in-wall-items-body"
-                  class="panel-collapse collapse inventory-content"
-                >
-                  <div class="row panel-body" id="in-wall-items-wrapper">
+                <div id="in-wall-items-body" class="hidden p-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="in-wall-items-wrapper">
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
-              <div id="in-wall-floor-items" class="panel panel-default">
-                <div id="in-wall-floor-items-header" class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
+
+              <!-- In Wall Floor Items -->
+              <div id="in-wall-floor-items" class="border border-gray-200 rounded-lg">
+                <div id="in-wall-floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <h4 class="text-base font-medium text-gray-900">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full text-left"
                       data-toggle="collapse"
-                      data-parent="#add-items"
-                      href="#in-wall-floor-items-body"
-                      >In Wall Floor Items</a
+                      data-target="#in-wall-floor-items-body"
                     >
+                      <span>In Wall Floor Items</span>
+                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </h4>
                 </div>
-                <div
-                  id="in-wall-floor-items-body"
-                  class="panel-collapse collapse inventory-content"
-                >
-                  <div class="row panel-body" id="in-wall-floor-items-wrapper">
+                <div id="in-wall-floor-items-body" class="hidden p-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="in-wall-floor-items-wrapper">
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
-              <div id="on-floor-items" class="panel panel-default">
-                <div id="on-floor-items-header" class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
+
+              <!-- On Floor Items -->
+              <div id="on-floor-items" class="border border-gray-200 rounded-lg">
+                <div id="on-floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <h4 class="text-base font-medium text-gray-900">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full text-left"
                       data-toggle="collapse"
-                      data-parent="#add-items"
-                      href="#on-floor-items-body"
-                      >On Floor Items</a
+                      data-target="#on-floor-items-body"
                     >
+                      <span>On Floor Items</span>
+                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </h4>
                 </div>
-                <div
-                  id="on-floor-items-body"
-                  class="panel-collapse collapse inventory-content"
-                >
-                  <div class="row panel-body" id="on-floor-items-wrapper">
+                <div id="on-floor-items-body" class="hidden p-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="on-floor-items-wrapper">
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
-              <div id="wall-floor-items" class="panel panel-default">
-                <div id="wall-floor-items-header" class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
+
+              <!-- Wall-Floor Items -->
+              <div id="wall-floor-items" class="border border-gray-200 rounded-lg">
+                <div id="wall-floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                  <h4 class="text-base font-medium text-gray-900">
+                    <button
+                      type="button"
+                      class="flex items-center justify-between w-full text-left"
                       data-toggle="collapse"
-                      data-parent="#add-items"
-                      href="#wall-floor-items-body"
-                      >Wall-Floor Items</a
+                      data-target="#wall-floor-items-body"
                     >
+                      <span>Wall-Floor Items</span>
+                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </h4>
                 </div>
-                <div
-                  id="wall-floor-items-body"
-                  class="panel-collapse collapse inventory-content"
-                >
-                  <div class="row panel-body" id="wall-floor-items-wrapper">
+                <div id="wall-floor-items-body" class="hidden p-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="wall-floor-items-wrapper">
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">
+
+          <!-- Footer -->
+          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-200">
+            <button
+              type="button"
+              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-100 text-base font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+              id="modal-close-btn-footer"
+            >
               Close
             </button>
           </div>

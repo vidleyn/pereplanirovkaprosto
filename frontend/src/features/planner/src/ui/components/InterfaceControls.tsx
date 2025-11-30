@@ -16,16 +16,6 @@ export default function InterfaceControls({
     (window as any).blueprint3d ||
     ((window as any).BP3DJS && (window as any).blueprint3d);
 
-  const handleSwitchView = (view: string) => {
-    const inst = bp();
-    if (!inst) return;
-    try {
-      inst.three.switchView(view);
-    } catch (e) {
-      // ignore
-    }
-  };
-
   const handleSwitchCameraMode = () => {
     const inst = bp();
     if (!inst) return;
@@ -53,134 +43,179 @@ export default function InterfaceControls({
   };
 
   const handleShowAddItems = () => {
-    const legacy = document.querySelector(
-      "#interfaces #showAddItems"
-    ) as HTMLElement | null;
-    if (legacy) legacy.click();
+    // Открываем модалку через глобальную функцию или напрямую
+    const modal = document.getElementById("add-items-modal");
+    if (modal) {
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    } else {
+      // Fallback для legacy кода
+      const legacy = document.querySelector(
+        "#interfaces #showAddItems"
+      ) as HTMLElement | null;
+      if (legacy) legacy.click();
+    }
   };
 
   return (
-    <div id="interface-controls" className="flex flex-col gap-2 items-center">
-      <div className="btn-group-vertical" id="viewcontrols">
-        <div className="btn btn-sm btn-default">
-          <a
-            className="btn btn-default bottom"
-            href="#"
-            id="leftview"
-            onClick={(e) => {
-              e.preventDefault();
-              handleSwitchView("leftview");
-            }}
-            title="Вид слева"
-          >
-            <span className="glyphicon glyphicon-object-align-left" />
-          </a>
-
-          <span className="btn-group-vertical">
-            <a
-              className="btn btn-default"
-              href="#"
-              id="topview"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSwitchView("topview");
-              }}
-              title="Вид сверху"
-            >
-              <span className="glyphicon glyphicon-object-align-horizontal" />
-            </a>
-            <a
-              className="btn btn-default"
-              href="#"
-              id="isometryview"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSwitchView("isometryview");
-              }}
-              title="3D вид"
-            >
-              <span className="glyphicon glyphicon-inbox" />
-            </a>
-            <a
-              className="btn btn-default"
-              href="#"
-              id="frontview"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSwitchView("frontview");
-              }}
-              title="Вид спереди"
-            >
-              <span className="glyphicon glyphicon-object-align-vertical" />
-            </a>
-          </span>
-
-          <a
-            className="btn btn-default bottom"
-            href="#"
-            id="rightview"
-            onClick={(e) => {
-              e.preventDefault();
-              handleSwitchView("rightview");
-            }}
-            title="Вид справа"
-          >
-            <span className="glyphicon glyphicon-object-align-right" />
-          </a>
-        </div>
-
+    <div
+      id="interface-controls"
+      className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3"
+    >
+      {/* Основные кнопки режимов просмотра */}
+      <div className="flex flex-col gap-2">
         <button
-          id="showSwitchCameraMode"
-          onClick={handleSwitchCameraMode}
-          className="btn btn-sm btn-default"
-          title="Переключить камеру (ортогональная/перспектива)"
-        >
-          <span className="glyphicon glyphicon-camera" />
-        </button>
-
-        <button
-          id="showSwitchWireframeMode"
-          onClick={handleSwitchWireframeMode}
-          className="btn btn-sm btn-default"
-          title="Переключить каркасный режим"
-        >
-          <span className="glyphicon glyphicon-pencil" />
-        </button>
-        <button
-          id="showAddItems"
-          onClick={handleShowAddItems}
-          className="btn btn-sm btn-default"
-          data-toggle="modal"
-          data-target="#add-items-modal"
-          title="Добавить/Удалить предметы в 3D"
-        >
-          <span className="glyphicon glyphicon-plus" />
-        </button>
-      </div>
-
-      <div>
-        <button
-          id="showFloorPlan"
           onClick={() => onViewModeChange("2d")}
-          className={
-            "btn btn-sm btn-default " + (viewMode === "2d" ? "active" : "")
-          }
+          className={`group relative flex items-center gap-3 rounded-2xl px-4 py-3 font-medium transition-all duration-300 ${
+            viewMode === "2d"
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/50 scale-105"
+              : "bg-white/90 backdrop-blur-md text-gray-700 shadow-lg hover:bg-white hover:scale-105"
+          }`}
           title="Редактировать 2D планировку"
         >
-          <span className="glyphicon glyphicon-move"></span> План этажа
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-5 w-5 transition-transform ${
+              viewMode === "2d" ? "rotate-0" : "group-hover:rotate-12"
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+            />
+          </svg>
+          <span className="whitespace-nowrap">2D План</span>
         </button>
+
         <button
-          id="showDesign"
           onClick={() => onViewModeChange("3d")}
-          className={
-            "btn btn-sm btn-default " + (viewMode === "3d" ? "active" : "")
-          }
+          className={`group relative flex items-center gap-3 rounded-2xl px-4 py-3 font-medium transition-all duration-300 ${
+            viewMode === "3d"
+              ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/50 scale-105"
+              : "bg-white/90 backdrop-blur-md text-gray-700 shadow-lg hover:bg-white hover:scale-105"
+          }`}
           title="Редактировать 3D планировку"
         >
-          <span className="glyphicon glyphicon-move"></span> 3D
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-5 w-5 transition-transform ${
+              viewMode === "3d" ? "rotate-0" : "group-hover:rotate-12"
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+            />
+          </svg>
+          <span className="whitespace-nowrap">3D Вид</span>
         </button>
       </div>
+
+      {/* Инструменты - всегда видны, больше размер */}
+      {viewMode === "3d" && (
+        <div className="flex flex-col gap-2 pt-1">
+          <button
+            id="showSwitchCameraMode"
+            onClick={handleSwitchCameraMode}
+            className="group flex items-center justify-center gap-3 rounded-2xl px-5 py-4 font-medium bg-white/90 backdrop-blur-md text-gray-700 shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+            title="Переключить камеру (ортогональная/перспектива)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 group-hover:scale-110 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <span className="whitespace-nowrap text-base">Камера</span>
+          </button>
+
+          <button
+            id="showSwitchWireframeMode"
+            onClick={handleSwitchWireframeMode}
+            className="group flex items-center justify-center gap-3 rounded-2xl px-5 py-4 font-medium bg-white/90 backdrop-blur-md text-gray-700 shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+            title="Переключить каркасный режим"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 group-hover:scale-110 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+            <span className="whitespace-nowrap text-base">Каркас</span>
+          </button>
+
+          <button
+            id="showAddItems"
+            onClick={handleShowAddItems}
+            className="group flex items-center justify-center gap-3 rounded-2xl px-5 py-4 font-medium bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/50 hover:from-green-600 hover:to-green-700 hover:scale-105 transition-all duration-300"
+            title="Добавить/Удалить предметы в 3D"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 group-hover:rotate-90 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            <span className="whitespace-nowrap text-base">Добавить</span>
+          </button>
+        </div>
+      )}
+
+      {/* Скрытые элементы для legacy кода */}
+      <button
+        id="showSwitchCameraMode"
+        className="hidden"
+        onClick={handleSwitchCameraMode}
+      />
+      <button
+        id="showSwitchWireframeMode"
+        className="hidden"
+        onClick={handleSwitchWireframeMode}
+      />
+      <button
+        id="showAddItems"
+        className="hidden"
+        onClick={handleShowAddItems}
+      />
     </div>
   );
 }
-

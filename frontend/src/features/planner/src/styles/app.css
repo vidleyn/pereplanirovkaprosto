@@ -21,26 +21,13 @@ div {
 	height: auto;
 }
 
-#interfaces, #interface-controls
-{
-	position: absolute; 
-/* 	width: 100%; */
-/* 	height: 100%; */
-}
-
 #interfaces
 {
+	position: absolute;
 	z-index: 0;
 }
 
-#interface-controls
-{
-	margin: 0 auto;
-	width: 100%;
-	text-align: center;
-	bottom: 10px;
-	z-index: 100;
-}
+/* #interface-controls теперь управляется через Tailwind в компоненте */
 #camera-controls
 {
 	float: left;
@@ -51,26 +38,15 @@ div {
 #floorplanner, #viewer
 {  
   position: absolute;
-  width: 100vw;
-  height:100vh;
-}
-
-#floorplanner-controls 
-{
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin: 20px 0;
-  padding: 0 20px; 
   width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
-#main-controls {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 0;  
-}
+/* #floorplanner-controls теперь управляется через Tailwind в компоненте */
+
+/* #main-controls теперь управляется через Tailwind в компоненте */
 
 #walltextures
 {
@@ -134,7 +110,7 @@ div {
 /*     padding: 0 !important; */
 /* } */
 
-/* Enable multiple lines in bootstrap tooltips */
+/* Tooltip styles (Bootstrap removed) */
 .tooltip-inner {
     white-space:pre-wrap;
 }

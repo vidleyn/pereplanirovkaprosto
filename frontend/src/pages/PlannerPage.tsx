@@ -10,7 +10,7 @@ import "../features/planner/src/styles/app.css";
  */
 export default function PlannerPage() {
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden" style={{ zIndex: 1000 }}>
+    <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-gray-50" style={{ zIndex: 1000 }}>
       <PlannerApp />
     </div>
   );

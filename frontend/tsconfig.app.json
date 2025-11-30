@@ -15,6 +15,12 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    
+    /* Path mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@planner/*": ["./src/features/planner/*"]
+    },
 
     /* Linting */
     "strict": true,
@@ -24,5 +30,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "public/js", "public/models"]
 }
