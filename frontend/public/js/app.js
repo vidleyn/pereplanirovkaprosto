@@ -97,16 +97,82 @@ var mainControls = function (blueprint3d) {
   }
 
   function loadDesign() {
-    files = $("#loadFile").get(0).files;
-    if (files.length == 0) {
-      files = $("#loadFile2d").get(0).files;
+    var inputElement = null;
+    
+    // Определяем, какой input изменился
+    if ($("#loadFile").get(0).files.length > 0) {
+      inputElement = $("#loadFile").get(0);
+    } else if ($("#loadFile2d").get(0).files.length > 0) {
+      inputElement = $("#loadFile2d").get(0);
     }
+    
+    // Не обрабатываем imageFileInput здесь
+    if (inputElement && inputElement.id === 'imageFileInput') {
+      return;
+    }
+    
+    files = inputElement ? inputElement.files : null;
+    if (!files || files.length == 0) return;
+    
+    var file = files[0];
+    
+    // Проверяем, что файл не является изображением (по MIME типу и расширению)
+    var fileName = file.name.toLowerCase();
+    var isImageByExtension = fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || 
+                             fileName.endsWith('.png') || fileName.endsWith('.gif') || 
+                             fileName.endsWith('.bmp') || fileName.endsWith('.webp');
+    
+    if ((file.type && file.type.startsWith('image/')) || isImageByExtension) {
+      console.warn('Изображения должны загружаться через "Загрузить по изображению"');
+      // Сбрасываем input
+      if (inputElement) {
+        inputElement.value = '';
+      }
+      return;
+    }
+    
     var reader = new FileReader();
     reader.onload = function (event) {
-      var data = event.target.result;
-      blueprint3d.model.loadSerialized(data);
+      try {
+        var data = event.target.result;
+        
+        // Проверяем, что данные не являются бинарными (не начинаются с бинарных маркеров изображений)
+        if (data.length > 0) {
+          var firstChar = data.charCodeAt(0);
+          // JPEG начинается с 0xFF 0xD8, PNG с 0x89 0x50, GIF с "GIF"
+          if (firstChar === 0xFF || firstChar === 0x89 || data.substring(0, 3) === 'GIF') {
+            throw new Error('Это изображение, используйте "Загрузить по изображению"');
+          }
+        }
+        
+        // Проверяем, что данные являются валидным JSON
+        var parsedData = JSON.parse(data);
+        
+        // Дополнительная проверка - должен быть объект с floorplan
+        if (!parsedData || typeof parsedData !== 'object') {
+          throw new Error('Файл не является валидным JSON файлом планировки');
+        }
+        
+        blueprint3d.model.loadSerialized(data);
+      } catch (e) {
+        console.error('Ошибка при загрузке файла:', e);
+        alert('Ошибка: ' + (e.message || 'файл не является валидным JSON файлом планировки'));
+        // Сбрасываем input
+        if (inputElement) {
+          inputElement.value = '';
+        }
+      }
     };
-    reader.readAsText(files[0]);
+    
+    reader.onerror = function() {
+      console.error('Ошибка при чтении файла');
+      alert('Ошибка при чтении файла');
+      if (inputElement) {
+        inputElement.value = '';
+      }
+    };
+    
+    reader.readAsText(file);
   }
 
   function saveDesign() {
@@ -129,6 +195,12 @@ var mainControls = function (blueprint3d) {
   async function handleImageFileSelection(file) {
     if (!file) return;
 
+    // Проверяем, что это действительно изображение
+    if (!file.type || !file.type.startsWith('image/')) {
+      alert('Пожалуйста, выберите изображение (JPG, PNG)');
+      return;
+    }
+
     try {
       var formData = new FormData();
       formData.append("file", file);
@@ -142,8 +214,11 @@ var mainControls = function (blueprint3d) {
 
       console.log(headers);
 
+      // Используем относительный URL для работы на любом окружении
+      var apiUrl = window.location.origin + "/api/floorplan/analyze";
+      
       var response = await fetch(
-        "http://localhost:8080/api/floorplan/analyze",
+        apiUrl,
         {
           method: "POST",
           headers: headers,
@@ -163,10 +238,27 @@ var mainControls = function (blueprint3d) {
         throw new Error(data.message || "Ошибка при анализе");
       }
 
-      if (data) {
-        let blueprint3dDataJSON = JSON.stringify(data.blueprint3d);
+      if (data && data.blueprint3d) {
+        // Убеждаемся, что blueprint3d является объектом или JSON строкой
+        var blueprint3dData = data.blueprint3d;
+        var blueprint3dDataJSON;
+        
+        if (typeof blueprint3dData === 'string') {
+          // Если это уже строка, проверяем что это валидный JSON
+          try {
+            JSON.parse(blueprint3dData);
+            blueprint3dDataJSON = blueprint3dData;
+          } catch (e) {
+            throw new Error("Получены некорректные данные: blueprint3d не является валидным JSON");
+          }
+        } else if (typeof blueprint3dData === 'object') {
+          // Если это объект, преобразуем в JSON строку
+          blueprint3dDataJSON = JSON.stringify(blueprint3dData);
+        } else {
+          throw new Error("Неверный формат данных blueprint3d");
+        }
 
-        console.log(blueprint3dDataJSON);
+        console.log("Загружаем планировку:", blueprint3dDataJSON.substring(0, 100) + "...");
 
         blueprint3d.model.loadSerialized(blueprint3dDataJSON);
       } else {
@@ -207,15 +299,47 @@ var mainControls = function (blueprint3d) {
   function init() {
     $("#new").click(newDesign);
     $("#new2d").click(newDesign);
-    $("#loadFile").change(loadDesign);
+    
+    // Обработчики для загрузки JSON файлов планировки
+    $("#loadFile").change(function(e) {
+      e.stopPropagation();
+      loadDesign();
+    });
+    
     $("#saveFile").click(saveDesign);
 
-    $("#loadFile2d").change(loadDesign);
+    $("#loadFile2d").change(function(e) {
+      e.stopPropagation();
+      loadDesign();
+    });
+    
     $("#saveFile2d").click(saveDesign);
 
+    // Обработчик для загрузки изображений
     $("#loadDesignFromImage").click(loadDesignFromImage);
-    $("#imageFileInput").change(function () {
-      handleImageFileSelection(this.files[0]);
+    
+    $("#imageFileInput").change(function (e) {
+      e.stopPropagation(); // Предотвращаем всплытие события
+      e.preventDefault();
+      
+      var file = this.files[0];
+      if (!file) {
+        this.value = '';
+        return;
+      }
+      
+      // Убеждаемся, что это изображение
+      if (!file.type || !file.type.startsWith('image/')) {
+        alert('Пожалуйста, выберите изображение (JPG, PNG)');
+        this.value = '';
+        return;
+      }
+      
+      // Вызываем обработчик изображений
+      handleImageFileSelection(file);
+      
+      // Сбрасываем input после обработки
+      this.value = '';
     });
 
     $("#saveMesh").click(saveMesh);
