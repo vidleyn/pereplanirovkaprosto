@@ -18,20 +18,91 @@ import Documentation from "./pages/Documentation";
 import AIChat from "./pages/AIChat";
 import Shop from "./pages/Shop";
 import Services from "./pages/Services";
+import Articles from "./pages/Articles";
 
-function Layout({ children }: { children: React.ReactNode }) {
+function AppContent() {
   const location = useLocation();
   const isPlannerPage = location.pathname === "/planner";
 
-  if (isPlannerPage) {
-    return <>{children}</>;
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow">{children}</main>
-      <Footer />
+      {!isPlannerPage && <Header />}
+
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/planner"
+            element={
+              <ProtectedRoute>
+                <Planner />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/floorplan-analyzer"
+            element={
+              <ProtectedRoute>
+                <FloorplanAnalyzer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/documentation"
+            element={
+              <ProtectedRoute>
+                <Documentation />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/contact" element={<Contacts />} />
+          <Route
+            path="/chatbot"
+            element={
+              <ProtectedRoute>
+                <AIChat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <ProtectedRoute>
+                <Shop />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/services"
+            element={
+              <ProtectedRoute>
+                <Services />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/articles"
+            element={
+              <ProtectedRoute>
+                <Articles />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+
+      {!isPlannerPage && <Footer />}
     </div>
   );
 }
@@ -40,78 +111,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Layout>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/planner"
-              element={
-                <ProtectedRoute>
-                  <PlannerPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/floorplan-analyzer"
-              element={
-                <ProtectedRoute>
-                  <FloorplanAnalyzer />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/documentation"
-              element={
-                <ProtectedRoute>
-                  <Documentation />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/contact" element={<Contacts />} />
-            <Route
-              path="/chatbot"
-              element={
-                <ProtectedRoute>
-                  <AIChat />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/shop"
-              element={
-                <ProtectedRoute>
-                  <Shop />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/services"
-              element={
-                <ProtectedRoute>
-                  <Services />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Layout>
+        <AppContent />
       </Router>
     </AuthProvider>
   );

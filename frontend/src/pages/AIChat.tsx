@@ -133,9 +133,9 @@ export default function AIChat() {
           </div>
 
           {/* Chat Container */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl flex flex-col h-[600px]">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl flex flex-col h-[600px] relative">
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 chat-messages min-h-0">
               {messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">
@@ -263,32 +263,32 @@ export default function AIChat() {
             )}
 
             {/* Input Area */}
-            <form onSubmit={handleSend} className="p-6 border-t border-white/10">
-              <div className="flex gap-3">
+            <form onSubmit={handleSend} className="p-4 sm:p-6 border-t border-white/10 bg-white/5 backdrop-blur-sm sticky bottom-0 z-10">
+              <div className="flex gap-2 sm:gap-3 items-stretch w-full">
                 <textarea
                   ref={inputRef}
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Задайте вопрос о перепланировке..."
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent resize-none"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent resize-none min-h-[50px] sm:min-h-[60px] max-h-[120px] text-sm sm:text-base"
                   rows={2}
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={!inputMessage.trim() || loading}
-                  className="px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-3 sm:px-4 md:px-6 bg-green-500 text-white rounded-xl hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 sm:gap-2 flex-shrink-0 h-[50px] sm:h-[60px] text-sm sm:text-base whitespace-nowrap"
                 >
                   {loading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Отправка...</span>
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span className="hidden sm:inline">Отправка...</span>
                     </>
                   ) : (
                     <>
                       <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -300,12 +300,12 @@ export default function AIChat() {
                           d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                         />
                       </svg>
-                      <span>Отправить</span>
+                      <span className="hidden sm:inline">Отправить</span>
                     </>
                   )}
                 </button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-gray-500 mt-2 hidden sm:block">
                 Нажмите Enter для отправки, Shift+Enter для новой строки
               </p>
             </form>
