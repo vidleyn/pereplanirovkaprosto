@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Door Loading</title>
+</head>
+<body>
+    <h1>Testing Door Model</h1>
+    <p>Check console for loading status</p>
+    <script>
+        // Test if file is accessible
+        fetch('models/obj/best_door.obj')
+            .then(response => {
+                console.log('File status:', response.status);
+                console.log('File headers:', response.headers);
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error('File not found');
+            })
+            .then(text => {
+                console.log('File loaded successfully, first 500 chars:', text.substring(0, 500));
+            })
+            .catch(error => {
+                console.error('Error loading file:', error);
+            });
+    </script>
+</body>
+</html>
+
+
