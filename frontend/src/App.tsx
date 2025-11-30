@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
@@ -36,72 +42,72 @@ function App() {
       <Router>
         <Layout>
           <Routes>
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <ProtectedRoute>
                   <Home />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/planner" 
+            <Route
+              path="/planner"
               element={
                 <ProtectedRoute>
                   <PlannerPage />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/floorplan-analyzer" 
+            <Route
+              path="/floorplan-analyzer"
               element={
                 <ProtectedRoute>
                   <FloorplanAnalyzer />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/documentation" 
+            <Route
+              path="/documentation"
               element={
                 <ProtectedRoute>
                   <Documentation />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route path="/contact" element={<Contacts />} />
-            <Route 
-              path="/chatbot" 
+            <Route
+              path="/chatbot"
               element={
                 <ProtectedRoute>
                   <AIChat />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/shop" 
+            <Route
+              path="/shop"
               element={
                 <ProtectedRoute>
                   <Shop />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/services" 
+            <Route
+              path="/services"
               element={
                 <ProtectedRoute>
                   <Services />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
