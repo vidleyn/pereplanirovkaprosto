@@ -19,6 +19,7 @@ import AIChat from "./pages/AIChat";
 import Shop from "./pages/Shop";
 import Services from "./pages/Services";
 import Articles from "./pages/Articles";
+import NotFound from "./pages/404";
 
 function AppContent() {
   const location = useLocation();
@@ -28,7 +29,7 @@ function AppContent() {
     <div className="min-h-screen flex flex-col">
       {!isPlannerPage && <Header />}
 
-      <main className="flex-grow">
+      <main className="flex-grow w-full">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
@@ -98,7 +99,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
