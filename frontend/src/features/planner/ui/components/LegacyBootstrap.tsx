@@ -25,7 +25,7 @@ export default function LegacyBootstrap() {
             floorplannerElement: "floorplanner-canvas",
             threeElement: "#viewer",
             threeCanvasElement: "three-canvas",
-            textureDir: "models/textures/",
+            textureDir: "/planner/rooms/textures/",
             widget: false,
           };
           try {
@@ -48,20 +48,20 @@ export default function LegacyBootstrap() {
       }
 
       // fallback: sequentially load legacy built JS files from build/js if present
-      // Use CDN for vendor libs (keeps repo small) then load local build artifacts that we keep in public/js
+      // Use CDN for vendor libs (keeps repo small) then load local build artifacts that we keep in public/planner/js
       const legacyFiles = [
-        // prefer local vendor builds from /js/lib served from public/ (faster and more reliable)
-        "/js/lib/jquery-2.1.4.min.js",
-        "/js/lib/jquery.flip.min.js",
-        "/js/lib/dat.gui.min.js",
-        "/js/lib/quicksettings.min.js",
-        "/js/lib/bootstrap.min.js",
+        // prefer local vendor builds from /planner/js/lib served from public/ (faster and more reliable)
+        "/planner/js/lib/jquery-2.1.4.min.js",
+        "/planner/js/lib/jquery.flip.min.js",
+        "/planner/js/lib/dat.gui.min.js",
+        "/planner/js/lib/quicksettings.min.js",
+        "/planner/js/lib/bootstrap.min.js",
         // load library bundle before UI scripts
-        "/js/bp3djs.js",
+        "/planner/js/bp3djs.js",
         // legacy UI helpers and glue
-        "/js/items.js",
-        "/js/items_gltf.js",
-        "/js/app.js",
+        "/planner/js/items.js",
+        "/planner/js/items_gltf.js",
+        "/planner/js/app.js",
       ];
 
       for (const f of legacyFiles) {

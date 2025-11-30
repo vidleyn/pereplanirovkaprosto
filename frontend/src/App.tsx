@@ -35,7 +35,7 @@ function AppContent() {
             path="/planner"
             element={
               <ProtectedRoute>
-                <Planner />
+                <PlannerPage />
               </ProtectedRoute>
             }
           />

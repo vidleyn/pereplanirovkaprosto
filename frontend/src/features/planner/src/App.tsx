@@ -14,6 +14,25 @@ export default function App() {
     (window as any).blueprint3d ||
     ((window as any).BP3DJS && (window as any).blueprint3d);
 
+  // Подключение Bootstrap CSS для иконок Glyphicons
+  useEffect(() => {
+    // Проверяем, не подключен ли уже Bootstrap CSS
+    if (!document.querySelector('link[href*="bootstrap.min.css"]')) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/planner/css/bootstrap.min.css";
+      document.head.appendChild(link);
+    }
+
+    // Cleanup при размонтировании
+    return () => {
+      const bootstrapLink = document.querySelector('link[href*="bootstrap.min.css"]');
+      if (bootstrapLink && bootstrapLink.getAttribute("href")?.includes("/planner/")) {
+        bootstrapLink.remove();
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const inst = bp();
     if (!inst) return;
