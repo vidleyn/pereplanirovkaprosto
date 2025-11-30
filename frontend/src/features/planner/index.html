@@ -15,17 +15,35 @@
     </div>
 
     <!-- Add Items Modal - Tailwind CSS version -->
-    <div id="add-items-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-      <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <div
+      id="add-items-modal"
+      class="hidden fixed inset-0 z-50 overflow-y-auto"
+      role="dialog"
+      aria-labelledby="modal-title"
+      aria-modal="true"
+    >
+      <div
+        class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+      >
         <!-- Background overlay -->
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" id="modal-backdrop"></div>
+        <div
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          id="modal-backdrop"
+        ></div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
+        >
           <!-- Header -->
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200">
+          <div
+            class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200"
+          >
             <div class="flex items-center justify-between">
-              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+              <h3
+                class="text-lg leading-6 font-medium text-gray-900"
+                id="modal-title"
+              >
                 Furniture Inventory
               </h3>
               <button
@@ -34,8 +52,18 @@
                 id="modal-close-btn"
                 aria-label="Close"
               >
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -46,7 +74,10 @@
             <div id="add-items" class="space-y-2">
               <!-- Floor Items -->
               <div id="floor-items" class="border border-gray-200 rounded-lg">
-                <div id="floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <div
+                  id="floor-items-header"
+                  class="bg-gray-50 px-4 py-3 border-b border-gray-200"
+                >
                   <h4 class="text-base font-medium text-gray-900">
                     <button
                       type="button"
@@ -55,14 +86,27 @@
                       data-target="#floor-items-body"
                     >
                       <span>Floor Items</span>
-                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        class="h-5 w-5 text-gray-500 transform transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                   </h4>
                 </div>
                 <div id="floor-items-body" class="hidden p-4">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="floor-items-wrapper">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    id="floor-items-wrapper"
+                  >
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
@@ -70,7 +114,10 @@
 
               <!-- Wall Items -->
               <div id="wall-items" class="border border-gray-200 rounded-lg">
-                <div id="wall-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <div
+                  id="wall-items-header"
+                  class="bg-gray-50 px-4 py-3 border-b border-gray-200"
+                >
                   <h4 class="text-base font-medium text-gray-900">
                     <button
                       type="button"
@@ -79,14 +126,27 @@
                       data-target="#wall-items-body"
                     >
                       <span>Wall Items</span>
-                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        class="h-5 w-5 text-gray-500 transform transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                   </h4>
                 </div>
                 <div id="wall-items-body" class="hidden p-4">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="wall-items-wrapper">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    id="wall-items-wrapper"
+                  >
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
@@ -94,7 +154,10 @@
 
               <!-- In Wall Items -->
               <div id="in-wall-items" class="border border-gray-200 rounded-lg">
-                <div id="in-wall-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <div
+                  id="in-wall-items-header"
+                  class="bg-gray-50 px-4 py-3 border-b border-gray-200"
+                >
                   <h4 class="text-base font-medium text-gray-900">
                     <button
                       type="button"
@@ -103,22 +166,41 @@
                       data-target="#in-wall-items-body"
                     >
                       <span>In Wall Items</span>
-                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        class="h-5 w-5 text-gray-500 transform transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                   </h4>
                 </div>
                 <div id="in-wall-items-body" class="hidden p-4">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="in-wall-items-wrapper">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    id="in-wall-items-wrapper"
+                  >
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
 
               <!-- In Wall Floor Items -->
-              <div id="in-wall-floor-items" class="border border-gray-200 rounded-lg">
-                <div id="in-wall-floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+              <div
+                id="in-wall-floor-items"
+                class="border border-gray-200 rounded-lg"
+              >
+                <div
+                  id="in-wall-floor-items-header"
+                  class="bg-gray-50 px-4 py-3 border-b border-gray-200"
+                >
                   <h4 class="text-base font-medium text-gray-900">
                     <button
                       type="button"
@@ -127,22 +209,41 @@
                       data-target="#in-wall-floor-items-body"
                     >
                       <span>In Wall Floor Items</span>
-                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        class="h-5 w-5 text-gray-500 transform transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                   </h4>
                 </div>
                 <div id="in-wall-floor-items-body" class="hidden p-4">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="in-wall-floor-items-wrapper">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    id="in-wall-floor-items-wrapper"
+                  >
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
 
               <!-- On Floor Items -->
-              <div id="on-floor-items" class="border border-gray-200 rounded-lg">
-                <div id="on-floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+              <div
+                id="on-floor-items"
+                class="border border-gray-200 rounded-lg"
+              >
+                <div
+                  id="on-floor-items-header"
+                  class="bg-gray-50 px-4 py-3 border-b border-gray-200"
+                >
                   <h4 class="text-base font-medium text-gray-900">
                     <button
                       type="button"
@@ -151,22 +252,41 @@
                       data-target="#on-floor-items-body"
                     >
                       <span>On Floor Items</span>
-                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        class="h-5 w-5 text-gray-500 transform transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                   </h4>
                 </div>
                 <div id="on-floor-items-body" class="hidden p-4">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="on-floor-items-wrapper">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    id="on-floor-items-wrapper"
+                  >
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
               </div>
 
               <!-- Wall-Floor Items -->
-              <div id="wall-floor-items" class="border border-gray-200 rounded-lg">
-                <div id="wall-floor-items-header" class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+              <div
+                id="wall-floor-items"
+                class="border border-gray-200 rounded-lg"
+              >
+                <div
+                  id="wall-floor-items-header"
+                  class="bg-gray-50 px-4 py-3 border-b border-gray-200"
+                >
                   <h4 class="text-base font-medium text-gray-900">
                     <button
                       type="button"
@@ -175,14 +295,27 @@
                       data-target="#wall-floor-items-body"
                     >
                       <span>Wall-Floor Items</span>
-                      <svg class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        class="h-5 w-5 text-gray-500 transform transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                   </h4>
                 </div>
                 <div id="wall-floor-items-body" class="hidden p-4">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="wall-floor-items-wrapper">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    id="wall-floor-items-wrapper"
+                  >
                     <!-- Items added here by items.js -->
                   </div>
                 </div>
@@ -191,7 +324,9 @@
           </div>
 
           <!-- Footer -->
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-200">
+          <div
+            class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-200"
+          >
             <button
               type="button"
               class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-100 text-base font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors"

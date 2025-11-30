@@ -58,13 +58,16 @@ export default function FloorplannerControls({
   };
 
   return (
-    <div
-      id="floorplanner-controls"
-      className="fixed top-6 left-6 z-50"
-    >
-      {/* Все кнопки в одной строке */}
+    <div id="floorplanner-controls" className="fixed top-6 left-6 z-50">
       <div className="flex flex-nowrap items-center gap-2">
-        {/* Файловые операции */}
+        {/* Логотип */}
+        <a
+          href="/"
+          className="flex items-center px-4 py-3 rounded-xl bg-white/95 backdrop-blur-md text-gray-800 font-semibold text-xl hover:bg-white hover:scale-105 transition-all duration-200 shadow-lg border border-gray-200/50 whitespace-nowrap"
+        >
+          РемонтПроводник
+        </a>
+
         <button
           title="Новая планировка"
           onClick={(e) => {

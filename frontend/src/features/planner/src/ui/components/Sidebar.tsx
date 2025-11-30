@@ -182,8 +182,8 @@ export default function Sidebar({
     <>
       {/* Sidebar */}
       <div
-        className={`h-full bg-white/95 backdrop-blur-md border-l border-gray-200 shadow-2xl overflow-y-auto transition-all duration-300 ease-in-out ${
-          isOpen ? "w-80 opacity-100" : "w-0 opacity-0 overflow-hidden"
+        className={`z-1000 h-full bg-white/95 backdrop-blur-md border-l border-gray-200 shadow-2xl overflow-y-auto transition-all duration-300 ease-in-out ${
+          isOpen ? "w-80 opacity-100" : "w-0 opacity-0 overflow-hidden "
         }`}
       >
         {isOpen && (
@@ -263,29 +263,6 @@ export default function Sidebar({
                 max={5}
                 step={0.25}
               />
-
-              <SubSection title="Измерения стен">
-                <Checkbox
-                  label="Внешние"
-                  checked={wallInfo.exterior}
-                  onChange={(v) => setWallInfo({ ...wallInfo, exterior: v })}
-                />
-                <Checkbox
-                  label="Внутренние"
-                  checked={wallInfo.interior}
-                  onChange={(v) => setWallInfo({ ...wallInfo, interior: v })}
-                />
-                <Checkbox
-                  label="Средняя линия"
-                  checked={wallInfo.midline}
-                  onChange={(v) => setWallInfo({ ...wallInfo, midline: v })}
-                />
-                <Checkbox
-                  label="Подписи"
-                  checked={wallInfo.labels}
-                  onChange={(v) => setWallInfo({ ...wallInfo, labels: v })}
-                />
-              </SubSection>
             </Section>
 
             {/* 3D Editor Section */}
