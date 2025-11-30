@@ -1,16 +1,16 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 // Получить токен из localStorage
 const getToken = () => {
-  return localStorage.getItem('authToken');
+  return localStorage.getItem("authToken");
 };
 
 // Сохранить токен
 export const setToken = (token) => {
   if (token) {
-    localStorage.setItem('authToken', token);
+    localStorage.setItem("authToken", token);
   } else {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem("authToken");
   }
 };
 
@@ -18,9 +18,9 @@ export const setToken = (token) => {
 export const getCurrentUser = () => {
   const token = getToken();
   if (!token) return null;
-  
+
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split(".")[1]));
     return payload;
   } catch {
     return null;
@@ -31,12 +31,12 @@ export const getCurrentUser = () => {
 const fetchWithAuth = async (url, options = {}) => {
   const token = getToken();
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...options.headers,
   };
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_BASE_URL}${url}`, {
@@ -47,8 +47,8 @@ const fetchWithAuth = async (url, options = {}) => {
   if (response.status === 401) {
     // Токен невалиден, удаляем его
     setToken(null);
-    window.location.href = '/login';
-    throw new Error('Unauthorized');
+    window.location.href = "/login";
+    throw new Error("Unauthorized");
   }
 
   return response;
@@ -59,22 +59,26 @@ export const authAPI = {
   // Регистрация
   register: async (data) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
 
     const result = await response.json();
-    
+
     if (!response.ok) {
       // Обработка ошибок валидации
       if (result.errors && Array.isArray(result.errors)) {
-        const errorMessages = result.errors.map(err => err.msg || err.message).join(', ');
+        const errorMessages = result.errors
+          .map((err) => err.msg || err.message)
+          .join(", ");
         throw new Error(errorMessages);
       }
-      throw new Error(result.message || result.error || 'Ошибка при регистрации');
+      throw new Error(
+        result.message || result.error || "Ошибка при регистрации"
+      );
     }
 
     return result;
@@ -83,17 +87,17 @@ export const authAPI = {
   // Вход
   login: async (username, password) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
     });
 
     const result = await response.json();
-    
+
     if (!response.ok) {
-      throw new Error(result.error || 'Неверное имя пользователя или пароль');
+      throw new Error(result.error || "Неверное имя пользователя или пароль");
     }
 
     // Сохраняем токен
@@ -109,11 +113,11 @@ export const authAPI = {
     const token = getToken();
     if (token) {
       try {
-        await fetchWithAuth('/api/auth/logout', {
-          method: 'POST',
+        await fetchWithAuth("/api/auth/logout", {
+          method: "POST",
         });
       } catch (error) {
-        console.error('Logout error:', error);
+        console.error("Logout error:", error);
       }
     }
     setToken(null);
@@ -121,10 +125,10 @@ export const authAPI = {
 
   // Получить текущего пользователя
   getCurrentUser: async () => {
-    const response = await fetchWithAuth('/api/auth/user');
-    
+    const response = await fetchWithAuth("/api/auth/user");
+
     if (!response.ok) {
-      throw new Error('Не удалось получить данные пользователя');
+      throw new Error("Не удалось получить данные пользователя");
     }
 
     return await response.json();
@@ -132,10 +136,10 @@ export const authAPI = {
 
   // Получить данные dashboard
   getDashboard: async () => {
-    const response = await fetchWithAuth('/dashboard');
-    
+    const response = await fetchWithAuth("/dashboard");
+
     if (!response.ok) {
-      throw new Error('Не удалось получить данные dashboard');
+      throw new Error("Не удалось получить данные dashboard");
     }
 
     return await response.json();
@@ -152,24 +156,26 @@ export const floorPlanAPI = {
   // Анализ планировки
   analyze: async (file) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     const token = getToken();
     const headers = {};
-    
+
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     const response = await fetch(`${API_BASE_URL}/api/floorplan/analyze`, {
-      method: 'POST',
+      method: "POST",
       headers,
       body: formData,
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Ошибка при анализе' }));
-      throw new Error(error.message || 'Ошибка при анализе планировки');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Ошибка при анализе" }));
+      throw new Error(error.message || "Ошибка при анализе планировки");
     }
 
     return await response.json();
@@ -177,15 +183,15 @@ export const floorPlanAPI = {
 };
 
 // AI Chat API
-const AI_CHAT_URL = import.meta.env.VITE_AI_CHAT_URL || 'http://localhost:3004';
+const AI_CHAT_URL = import.meta.env.VITE_AI_CHAT_URL || "http://localhost:3004";
 
 export const aiChatAPI = {
   // Отправка сообщения в AI чат
   sendMessage: async (sessionId, message) => {
     const response = await fetch(`${AI_CHAT_URL}/chat`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         session_id: sessionId,
@@ -194,8 +200,12 @@ export const aiChatAPI = {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ detail: 'Ошибка при отправке сообщения' }));
-      throw new Error(error.detail || error.message || 'Ошибка при отправке сообщения');
+      const error = await response
+        .json()
+        .catch(() => ({ detail: "Ошибка при отправке сообщения" }));
+      throw new Error(
+        error.detail || error.message || "Ошибка при отправке сообщения"
+      );
     }
 
     return await response.json();
@@ -217,14 +227,18 @@ export const shopAPI = {
   // Получить все товары
   getProducts: async (filters = {}) => {
     const params = new URLSearchParams();
-    if (filters.category) params.append('category', filters.category);
-    if (filters.search) params.append('search', filters.search);
+    if (filters.category) params.append("category", filters.category);
+    if (filters.search) params.append("search", filters.search);
 
-    const response = await fetch(`${API_BASE_URL}/api/shop/products?${params.toString()}`);
-    
+    const response = await fetch(
+      `${API_BASE_URL}/api/shop/products?${params.toString()}`
+    );
+
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке товаров' }));
-      throw new Error(error.message || 'Ошибка при загрузке товаров');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Ошибка при загрузке товаров" }));
+      throw new Error(error.message || "Ошибка при загрузке товаров");
     }
 
     const result = await response.json();
@@ -234,10 +248,12 @@ export const shopAPI = {
   // Получить товар по ID
   getProductById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/api/shop/products/${id}`);
-    
+
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Товар не найден' }));
-      throw new Error(error.message || 'Товар не найден');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Товар не найден" }));
+      throw new Error(error.message || "Товар не найден");
     }
 
     const result = await response.json();
@@ -247,10 +263,12 @@ export const shopAPI = {
   // Получить список категорий
   getCategories: async () => {
     const response = await fetch(`${API_BASE_URL}/api/shop/categories`);
-    
+
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке категорий' }));
-      throw new Error(error.message || 'Ошибка при загрузке категорий');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Ошибка при загрузке категорий" }));
+      throw new Error(error.message || "Ошибка при загрузке категорий");
     }
 
     const result = await response.json();
@@ -263,14 +281,18 @@ export const servicesAPI = {
   // Получить все услуги
   getServices: async (filters = {}) => {
     const params = new URLSearchParams();
-    if (filters.category) params.append('category', filters.category);
-    if (filters.search) params.append('search', filters.search);
+    if (filters.category) params.append("category", filters.category);
+    if (filters.search) params.append("search", filters.search);
 
-    const response = await fetch(`${API_BASE_URL}/api/services/services?${params.toString()}`);
-    
+    const response = await fetch(
+      `${API_BASE_URL}/api/services/services?${params.toString()}`
+    );
+
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке услуг' }));
-      throw new Error(error.message || 'Ошибка при загрузке услуг');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Ошибка при загрузке услуг" }));
+      throw new Error(error.message || "Ошибка при загрузке услуг");
     }
 
     const result = await response.json();
@@ -280,10 +302,12 @@ export const servicesAPI = {
   // Получить услугу по ID
   getServiceById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/api/services/services/${id}`);
-    
+
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Услуга не найдена' }));
-      throw new Error(error.message || 'Услуга не найдена');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Услуга не найдена" }));
+      throw new Error(error.message || "Услуга не найдена");
     }
 
     const result = await response.json();
@@ -293,14 +317,15 @@ export const servicesAPI = {
   // Получить список категорий
   getCategories: async () => {
     const response = await fetch(`${API_BASE_URL}/api/services/categories`);
-    
+
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Ошибка при загрузке категорий' }));
-      throw new Error(error.message || 'Ошибка при загрузке категорий');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Ошибка при загрузке категорий" }));
+      throw new Error(error.message || "Ошибка при загрузке категорий");
     }
 
     const result = await response.json();
     return result.data || [];
   },
 };
-
